@@ -1,23 +1,23 @@
 <div
-  [ngClass]="store.currentSentence().classes || []"
-  [innerHTML]="'<div>' + store.output() + '</div>'"
+  class="dialog-box"
+  [innerHTML]="store.previousOutput() + store.output()"
 ></div>
-<br />
-{{ store.currentSentence().text }}
 <br />
 
 @if(!store.isPrinting() && !store.currentSentence().chainNext &&
-!store.currentSentence().actions) {
-<button (click)="store.nextSentence()">Next</button>
+!store.currentSentence().prompts) {
+<button (click)="store.nextSentence()">
+  Press Space To Go To Next Sentence
+</button>
 }
 
 <br />
 
-@if(!store.isPrinting() && store.currentSentence().actions; as actions) {
+@if(!store.isPrinting() && store.currentSentence().prompts; as prompts) {
 <ng-container>
-  @for (action of actions; track $index) {
-  <button (click)="runSentenceCallback(action.callback)">
-    {{ action.label }}
+  @for (prompt of prompts; track $index) {
+  <button (click)="runSentenceCallback(prompt?.action, prompt?.nextIndex)">
+    {{ prompt.label || "Next" }}
   </button>
   }
 </ng-container>

@@ -5,13 +5,14 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Dialog, Sentence } from './dialog.model';
+import { Dialog } from './dialog.model';
 import { computed } from '@angular/core';
 
 type DialogState = {
   dialog: Dialog;
   sentenceIndex: number;
   output: string;
+  previousOutput: string;
   isPrinting: boolean;
   slowOutput: boolean;
   isDone: boolean;
@@ -21,6 +22,7 @@ const initialState: DialogState = {
   dialog: { id: '', sentences: [] },
   sentenceIndex: 0,
   output: '',
+  previousOutput: '',
   isPrinting: true,
   slowOutput: true,
   isDone: false,
@@ -30,7 +32,11 @@ export const DialogStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     currentSentence: computed(() => {
-      return store.dialog()?.sentences[store.sentenceIndex()] || { text: '' };
+      return (
+        store.dialog()?.sentences[store.sentenceIndex()] || {
+          text: '',
+        }
+      );
     }),
   })),
   withMethods((store) => ({
@@ -44,11 +50,14 @@ export const DialogStore = signalStore(
         isPrinting: false,
       }));
     },
-    nextSentence(): void {
+    nextSentence(nextSentenceIndex?: number): void {
       patchState(store, (state) => ({
         ...state,
-        output: store.currentSentence().chainNext ? state.output : '',
-        sentenceIndex: state.sentenceIndex + 1,
+        previousOutput: store.currentSentence().chainNext
+          ? state.previousOutput + state.output
+          : '',
+        output: '',
+        sentenceIndex: nextSentenceIndex ?? state.sentenceIndex + 1,
         isPrinting: true,
         slowOutput: true,
       }));
@@ -56,16 +65,27 @@ export const DialogStore = signalStore(
     updateDialog(dialog: Dialog): void {
       patchState(store, (state) => ({ ...state, dialog }));
     },
-    addToOutput(character: string): void {
-      patchState(store, (state) => ({
-        ...state,
-        output: state.output + character,
-      }));
+    updateOutput(index: number): void {
+      patchState(store, (state) => {
+        const sentence = store.currentSentence();
+        const splitText = [
+          sentence.text.slice(0, index),
+          sentence.text.slice(index),
+        ];
+
+        return {
+          ...state,
+          output: `<span class="${(sentence.classes || []).join(' ')}">${
+            splitText[0]
+          }</span><span class="hidden">${splitText[1]}</span> `,
+        };
+      });
     },
     clearOutput(): void {
       patchState(store, (state) => ({
         ...state,
         output: '',
+        previousOutput: '',
       }));
     },
   }))

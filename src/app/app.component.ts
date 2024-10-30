@@ -42,42 +42,62 @@ export class AppComponent implements OnInit {
     id: 'npc-1',
     sentences: [
       {
-        text: 'hello first line',
+        text: 'Hello, and...',
+        gameAction: {
+          afterSentence: () => console.log('All cleaned...'),
+        },
       },
       {
-        text: 'hiddddddddd',
+        text: 'Welcome to my Dialog...',
+        gameAction: {
+          beforeSentence: () => console.log('WELCOME'),
+        },
         chainNext: true,
       },
       {
-        text: 'hixxxxxxxxxxx',
-        characterDelay: 620,
-        startDelay: 440,
+        text: '(wait for it)',
+        startDelay: 500,
+        classes: ['small'],
+        chainNext: true,
+      },
+      {
+        text: 'SYSTEM!',
+        startDelay: 1000,
+        typingDelay: 1000,
+        classes: ['success', 'blink'],
+      },
+      {
+        text: 'hey',
+        startDelay: 500,
         chainNext: true,
         classes: ['bold', 'alert'],
       },
       {
-        text: 'hicccccccccc',
-        characterDelay: 20,
-        startDelay: 300,
+        text: '. . . . . .',
         chainNext: true,
+        classes: ['bold', 'alert'],
       },
       {
-        text: 'second line',
-        characterDelay: 200,
-        startDelay: 1000,
-        actions: [
+        text: 'You can also press Space during a long string to output the whole text.',
+        typingDelay: 200,
+      },
+      {
+        text: 'And you can pass custom prompts to answer questions or branch conversations.',
+        prompts: [
           {
-            label: 'TriggerCustomAction',
-            callback: () => {
-              console.log('action triggered');
+            label: 'Say hi and to go beginning',
+            action: () => {
+              alert('Hi!');
+            },
+            nextIndex: 0,
+          },
+          {
+            label: 'Say bye and end dialog',
+            action: () => {
+              alert('Bye!');
             },
           },
         ],
-        chainNext: true,
-      },
-      {
-        text: 'done last line',
-        characterDelay: 100,
       },
     ],
   };
@@ -86,18 +106,23 @@ export class AppComponent implements OnInit {
     effect(async () => {
       const sentence = this.store.currentSentence();
 
-      const splitText = sentence.text.split('');
-
       await delay(sentence.startDelay ?? 0);
 
-      for (const c of splitText) {
-        this.store.addToOutput(c);
+      for (
+        let splitIndex = 0;
+        splitIndex <= sentence.text.length;
+        splitIndex++
+      ) {
+        this.store.updateOutput(splitIndex);
         if (untracked(this.store.slowOutput)) {
-          await delay(sentence.characterDelay ?? 50);
+          await delay(sentence.typingDelay ?? 50);
+        } else {
+          this.store.updateOutput(sentence.text.length);
+          break;
         }
       }
 
-      if (!sentence.chainNext || sentence.actions) {
+      if (!sentence.chainNext || sentence.prompts) {
         this.store.endPrinting();
       } else {
         this.store.nextSentence();
@@ -113,9 +138,9 @@ export class AppComponent implements OnInit {
     this.store.rushPrinting();
   }
 
-  runSentenceCallback(cb: any) {
+  runSentenceCallback(cb: any, nextIndex?: number) {
     cb();
-    this.store.nextSentence();
+    this.store.nextSentence(nextIndex);
   }
 }
 

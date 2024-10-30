@@ -1,7 +1,32 @@
-.bold {
-  font-weight: bolder;
+::ng-deep {
+  .hidden {
+    opacity: 0;
+  }
+
+  .bold {
+    font-weight: bolder;
+  }
+
+  .success {
+    color: var(--success);
+  }
+
+  .alert {
+    color: var(--alert);
+  }
+
+  .blink {
+    animation: blink-animation 0.5s steps(2, start) infinite;
+  }
+  @keyframes blink-animation {
+    to {
+      visibility: hidden;
+    }
+  }
 }
 
-.alert {
-  color: #f00f55;
+.dialog-box {
+  width: 240px;
+  background-color: #ddd;
+  font-size: 22px;
 }

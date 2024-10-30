@@ -1,8 +1,9 @@
 export type Sentence = {
   text: string;
   startDelay?: number;
-  characterDelay?: number;
-  actions?: { label: string; callback: () => void }[];
+  typingDelay?: number;
+  gameAction?: { beforeSentence?: () => void; afterSentence?: () => void };
+  prompts?: { label?: string; action?: () => void; nextIndex?: number }[];
   chainNext?: boolean;
   classes?: string[];
 };
