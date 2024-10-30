@@ -2,43 +2,66 @@ import {
   patchState,
   signalStore,
   withComputed,
+  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
 import { Dialog } from './dialog.model';
-import { computed } from '@angular/core';
+import { computed, effect } from '@angular/core';
 
 type DialogState = {
-  dialog: Dialog;
+  dialog: Dialog | null;
   sentenceIndex: number;
   output: string;
   previousOutput: string;
   isPrinting: boolean;
   slowOutput: boolean;
-  isDone: boolean;
+  isFinished: boolean;
 };
 
 const initialState: DialogState = {
-  dialog: { id: '', sentences: [] },
+  dialog: null,
   sentenceIndex: 0,
   output: '',
   previousOutput: '',
   isPrinting: true,
   slowOutput: true,
-  isDone: false,
+  isFinished: false,
 };
 
 export const DialogStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     currentSentence: computed(() => {
-      return (
-        store.dialog()?.sentences[store.sentenceIndex()] || {
-          text: '',
-        }
-      );
+      const newSentence =
+        store.dialog()?.sentences[store.sentenceIndex()] || null;
+
+      return newSentence;
     }),
   })),
+  withHooks({
+    onInit(store) {
+      // effect(() => {
+      //   if (!store.currentSentence()) {
+      //     console.log('shoud end');
+      //   }
+      // });
+
+      effect(() => {
+        const isFinished = store.isFinished();
+        if (!isFinished) {
+          store.dialog()?.gameAction?.beforeDialog?.();
+        } else {
+          store.dialog()?.gameAction?.afterDialog?.();
+        }
+      });
+
+      effect(() => {
+        const sentence = store.currentSentence();
+        sentence?.gameAction?.beforeSentence?.();
+      });
+    },
+  }),
   withMethods((store) => ({
     endPrinting(): void {
       patchState(store, (state) => ({ ...state, isPrinting: false }));
@@ -51,35 +74,41 @@ export const DialogStore = signalStore(
       }));
     },
     nextSentence(nextSentenceIndex?: number): void {
-      patchState(store, (state) => ({
-        ...state,
-        previousOutput: store.currentSentence().chainNext
-          ? state.previousOutput + state.output
-          : '',
-        output: '',
-        sentenceIndex: nextSentenceIndex ?? state.sentenceIndex + 1,
-        isPrinting: true,
-        slowOutput: true,
-      }));
-    },
-    updateDialog(dialog: Dialog): void {
-      patchState(store, (state) => ({ ...state, dialog }));
-    },
-    updateOutput(index: number): void {
       patchState(store, (state) => {
-        const sentence = store.currentSentence();
-        const splitText = [
-          sentence.text.slice(0, index),
-          sentence.text.slice(index),
-        ];
-
+        const nextIndex = nextSentenceIndex ?? state.sentenceIndex + 1;
         return {
           ...state,
-          output: `<span class="${(sentence.classes || []).join(' ')}">${
-            splitText[0]
-          }</span><span class="hidden">${splitText[1]}</span> `,
+          previousOutput: store.currentSentence()?.chainNext
+            ? state.previousOutput + state.output
+            : '',
+          output: '',
+          sentenceIndex: nextIndex,
+          isPrinting: true,
+          slowOutput: true,
         };
       });
+    },
+    updateDialog(dialog: Dialog): void {
+      patchState(store, (state) => {
+        return { ...state, dialog };
+      });
+    },
+    endDialog(): void {
+      patchState(store, (state) => ({ ...state, isFinished: true }));
+    },
+    updateOutput(index: number): void {
+      const sentence = store.currentSentence();
+      const splitText = [
+        sentence?.text.slice(0, index),
+        sentence?.text.slice(index),
+      ];
+
+      patchState(store, (state) => ({
+        ...state,
+        output: `<span class="${(sentence?.classes || []).join(' ')}">${
+          splitText[0]
+        }</span><span class="hidden">${splitText[1]}</span> `,
+      }));
     },
     clearOutput(): void {
       patchState(store, (state) => ({

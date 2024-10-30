@@ -32,7 +32,9 @@ export class AppComponent implements OnInit {
         this.rushOutput();
       }
     } else if (event.key === '`') {
-      console.log('quit dialog');
+      this.store.endDialog();
+    } else if (event.key === 'd') {
+      console.log(this.store.dialog());
     }
   }
 
@@ -40,47 +42,53 @@ export class AppComponent implements OnInit {
 
   npc: Dialog = {
     id: 'npc-1',
+    gameAction: {
+      beforeDialog: () => console.log('Start of dialog'),
+      afterDialog: () => console.log('End of dialog'),
+    },
     sentences: [
       {
         text: 'Hello, and...',
+        speaker: 'first-dude',
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
       },
       {
         text: 'Welcome to my Dialog...',
+        speaker: 'second-dude',
         gameAction: {
           beforeSentence: () => console.log('WELCOME'),
         },
         chainNext: true,
       },
-      {
-        text: '(wait for it)',
-        startDelay: 500,
-        classes: ['small'],
-        chainNext: true,
-      },
-      {
-        text: 'SYSTEM!',
-        startDelay: 1000,
-        typingDelay: 1000,
-        classes: ['success', 'blink'],
-      },
-      {
-        text: 'hey',
-        startDelay: 500,
-        chainNext: true,
-        classes: ['bold', 'alert'],
-      },
-      {
-        text: '. . . . . .',
-        chainNext: true,
-        classes: ['bold', 'alert'],
-      },
-      {
-        text: 'You can also press Space during a long string to output the whole text.',
-        typingDelay: 200,
-      },
+      // {
+      //   text: '(wait for it)',
+      //   startDelay: 500,
+      //   classes: ['small'],
+      //   chainNext: true,
+      // },
+      // {
+      //   text: 'SYSTEM!',
+      //   startDelay: 1000,
+      //   typingDelay: 1000,
+      //   classes: ['success', 'blink'],
+      // },
+      // {
+      //   text: 'hey',
+      //   startDelay: 500,
+      //   chainNext: true,
+      //   classes: ['bold', 'alert'],
+      // },
+      // {
+      //   text: '. . . . . .',
+      //   chainNext: true,
+      //   classes: ['bold', 'alert'],
+      // },
+      // {
+      //   text: 'You can also press Space during a long string to output the whole text.',
+      //   typingDelay: 200,
+      // },
       {
         text: 'And you can pass custom prompts to answer questions or branch conversations.',
         prompts: [
@@ -103,31 +111,39 @@ export class AppComponent implements OnInit {
   };
 
   constructor() {
-    effect(async () => {
-      const sentence = this.store.currentSentence();
+    effect(
+      async () => {
+        const sentence = this.store.currentSentence();
 
-      await delay(sentence.startDelay ?? 0);
-
-      for (
-        let splitIndex = 0;
-        splitIndex <= sentence.text.length;
-        splitIndex++
-      ) {
-        this.store.updateOutput(splitIndex);
-        if (untracked(this.store.slowOutput)) {
-          await delay(sentence.typingDelay ?? 50);
-        } else {
-          this.store.updateOutput(sentence.text.length);
-          break;
+        if (!sentence) {
+          this.store.endDialog();
+          return;
         }
-      }
 
-      if (!sentence.chainNext || sentence.prompts) {
-        this.store.endPrinting();
-      } else {
-        this.store.nextSentence();
-      }
-    });
+        await delay(sentence.startDelay ?? 0);
+
+        for (
+          let splitIndex = 0;
+          splitIndex <= sentence.text.length;
+          splitIndex++
+        ) {
+          this.store.updateOutput(splitIndex);
+          if (untracked(this.store.slowOutput)) {
+            await delay(sentence.typingDelay ?? 50);
+          } else {
+            this.store.updateOutput(sentence.text.length);
+            break;
+          }
+        }
+
+        if (!sentence.chainNext || sentence.prompts) {
+          this.store.endPrinting();
+        } else {
+          this.store.nextSentence();
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   async ngOnInit() {
