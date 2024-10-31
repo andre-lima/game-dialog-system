@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dialog-system": {
+    "dialog-system-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/dialog-system",
+            "outputPath": "dist/dialog-system-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "dialog-system:build:production"
+              "buildTarget": "dialog-system-app:build:production"
             },
             "development": {
-              "buildTarget": "dialog-system:build:development"
+              "buildTarget": "dialog-system-app:build:development"
             }
           },
           "defaultConfiguration": "development"
