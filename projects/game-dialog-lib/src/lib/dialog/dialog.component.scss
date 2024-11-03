@@ -2,31 +2,12 @@
   .hidden {
     opacity: 0;
   }
-
-  .bold {
-    font-weight: bolder;
-  }
-
-  .success {
-    color: var(--success);
-  }
-
-  .alert {
-    color: var(--alert);
-  }
-
-  .blink {
-    animation: blink-animation 0.5s steps(2, start) infinite;
-  }
-  @keyframes blink-animation {
-    to {
-      visibility: hidden;
-    }
-  }
 }
 
 .dialog-box {
-  position: relative;
+  position: absolute;
+  top: 500px;
+  width: 100%;
 }
 
 .speaker-box {
@@ -38,7 +19,19 @@
 
 .text-box {
   padding: 20px;
-  width: 240px;
+  width: 100%;
   background-color: #ddd;
   font-size: 22px;
+}
+
+.bubble {
+  &.dialog-box {
+    width: 240px;
+  }
+  .speaker-box {
+    display: none;
+  }
+  .text-box {
+    font-size: 1em;
+  }
 }

@@ -1,29 +1,29 @@
-<div class="dialog-box">
-  @if ( store.currentSentence()?.speaker ) {
-  <div class="speaker-box">{{ store.currentSentence()?.speaker }}</div>
+<div
+  class="dialog-box"
+  [ngClass]="{ bubble: isBubbleDialog() }"
+  [style.left]="dialogBoxPosition().x + 'px'"
+  [style.top]="dialogBoxPosition().y + 'px'"
+>
+  @if ( currentSpeaker(); as speaker ) {
+  <div class="speaker-box">{{ speaker }}</div>
   }
   <div
     class="text-box"
     [innerHTML]="store.previousOutput() + store.output()"
   ></div>
-</div>
-<br />
 
-@if(!store.isPrinting() && !store.currentSentence()?.chainNext &&
-!store.currentSentence()?.prompts) {
-<button (click)="store.nextSentence()">
-  Press Space To Go To Next Sentence
-</button>
-}
-
-<br />
-
-@if(!store.isPrinting() && store.currentSentence()?.prompts; as prompts) {
-<ng-container>
-  @for (prompt of prompts; track $index) {
-  <button (click)="runSentenceCallback(prompt?.action, prompt?.nextIndex)">
-    {{ prompt.label || "Next" }}
+  @if(!store.isPrinting() && !store.currentSentence()?.chainNext &&
+  !store.currentSentence()?.prompts) {
+  <button (click)="store.nextSentence()">
+    Press Space To Go To Next Sentence
   </button>
+  } @if(!store.isPrinting() && store.currentSentence()?.prompts; as prompts) {
+  <ng-container>
+    @for (prompt of prompts; track $index) {
+    <button (click)="runSentenceCallback(prompt?.action, prompt?.nextIndex)">
+      {{ prompt.label || "Next" }}
+    </button>
+    }
+  </ng-container>
   }
-</ng-container>
-}
+</div>

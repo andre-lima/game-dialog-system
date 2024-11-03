@@ -11,6 +11,7 @@ export type Sentence = {
 
 export type Dialog = {
   id: string;
-  gameAction?: { beforeDialog?: () => void; afterDialog?: () => void };
   sentences: Sentence[];
+  position?: { [speaker: string]: { x: number; y: number } };
+  gameAction?: { beforeDialog?: () => void; afterDialog?: () => void };
 };

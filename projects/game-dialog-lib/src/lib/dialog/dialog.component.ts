@@ -2,15 +2,17 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ComponentRef,
+  computed,
   effect,
   HostListener,
   inject,
-  OnInit,
   untracked,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DialogStore } from './store/dialog.store';
 import { Dialog } from './store/dialog.model';
+import { dialogConfig } from './dialog.config';
 
 @Component({
   selector: 'game-dialog',
@@ -21,7 +23,7 @@ import { Dialog } from './store/dialog.model';
   styleUrl: './dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameDialogComponent implements OnInit {
+export class GameDialogComponent {
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === ' ') {
@@ -38,78 +40,36 @@ export class GameDialogComponent implements OnInit {
   }
 
   store = inject(DialogStore);
+  componentRef?: ComponentRef<GameDialogComponent>;
 
-  npc: Dialog = {
-    id: 'npc-1',
-    gameAction: {
-      beforeDialog: () => console.log('Start of dialog'),
-      afterDialog: () => console.log('End of dialog'),
-    },
-    sentences: [
-      {
-        text: 'Hello, and...',
-        speaker: 'first-dude',
-        gameAction: {
-          afterSentence: () => console.log('All cleaned...'),
-        },
-      },
-      {
-        text: 'Welcome to my Dialog...',
-        speaker: 'second-dude',
-        gameAction: {
-          beforeSentence: () => console.log('WELCOME'),
-        },
-        chainNext: true,
-      },
-      // {
-      //   text: '(wait for it)',
-      //   startDelay: 500,
-      //   classes: ['small'],
-      //   chainNext: true,
-      // },
-      // {
-      //   text: 'SYSTEM!',
-      //   startDelay: 1000,
-      //   typingDelay: 1000,
-      //   classes: ['success', 'blink'],
-      // },
-      // {
-      //   text: 'hey',
-      //   startDelay: 500,
-      //   chainNext: true,
-      //   classes: ['bold', 'alert'],
-      // },
-      // {
-      //   text: '. . . . . .',
-      //   chainNext: true,
-      //   classes: ['bold', 'alert'],
-      // },
-      // {
-      //   text: 'You can also press Space during a long string to output the whole text.',
-      //   typingDelay: 200,
-      // },
-      {
-        text: 'And you can pass custom prompts to answer questions or branch conversations.',
-        prompts: [
-          {
-            label: 'Say hi and to go beginning',
-            action: () => {
-              alert('Hi!');
-            },
-            nextIndex: 0,
-          },
-          {
-            label: 'Say bye and end dialog',
-            action: () => {
-              alert('Bye!');
-            },
-          },
-        ],
-      },
-    ],
-  };
+  currentSpeaker = computed(() => {
+    return this.store.currentSentence()?.speaker;
+  });
+
+  dialogBoxPosition = computed(() => {
+    const speaker = this.currentSpeaker() || '';
+    const speakerPosition = this.store.dialog()?.position?.[speaker];
+
+    return speakerPosition || dialogConfig.bottomDialog.position;
+  });
+
+  isBubbleDialog = computed(() => {
+    const speaker = this.currentSpeaker() || '';
+
+    return this.store.dialog()?.position?.[speaker];
+  });
 
   constructor() {
+    effect(() => {
+      const isFinished = this.store.isFinished();
+      if (!isFinished) {
+        this.store.dialog()?.gameAction?.beforeDialog?.();
+      } else {
+        this.store.dialog()?.gameAction?.afterDialog?.();
+        this.closeDialog();
+      }
+    });
+
     effect(
       async () => {
         const sentence = this.store.currentSentence();
@@ -119,7 +79,7 @@ export class GameDialogComponent implements OnInit {
           return;
         }
 
-        await delay(sentence.startDelay ?? 0);
+        await delay(sentence.startDelay ?? dialogConfig.defaultStartDelay);
 
         for (
           let splitIndex = 0;
@@ -128,7 +88,9 @@ export class GameDialogComponent implements OnInit {
         ) {
           this.store.updateOutput(splitIndex);
           if (untracked(this.store.slowOutput)) {
-            await delay(sentence.typingDelay ?? 50);
+            await delay(
+              sentence.typingDelay ?? dialogConfig.defaultTypingDelay
+            );
           } else {
             this.store.updateOutput(sentence.text.length);
             break;
@@ -145,8 +107,13 @@ export class GameDialogComponent implements OnInit {
     );
   }
 
-  async ngOnInit() {
-    this.store.updateDialog(this.npc);
+  openDialog(dialog: Dialog, ref: ComponentRef<GameDialogComponent>) {
+    this.componentRef = ref;
+    this.store.updateDialog(dialog);
+  }
+
+  closeDialog() {
+    this.componentRef?.destroy();
   }
 
   rushOutput() {

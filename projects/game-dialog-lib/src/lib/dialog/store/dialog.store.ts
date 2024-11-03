@@ -41,21 +41,6 @@ export const DialogStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      // effect(() => {
-      //   if (!store.currentSentence()) {
-      //     console.log('shoud end');
-      //   }
-      // });
-
-      effect(() => {
-        const isFinished = store.isFinished();
-        if (!isFinished) {
-          store.dialog()?.gameAction?.beforeDialog?.();
-        } else {
-          store.dialog()?.gameAction?.afterDialog?.();
-        }
-      });
-
       effect(() => {
         const sentence = store.currentSentence();
         sentence?.gameAction?.beforeSentence?.();
@@ -94,7 +79,10 @@ export const DialogStore = signalStore(
       });
     },
     endDialog(): void {
-      patchState(store, (state) => ({ ...state, isFinished: true }));
+      patchState(store, (state) => ({
+        ...state,
+        isFinished: true,
+      }));
     },
     updateOutput(index: number): void {
       const sentence = store.currentSentence();
