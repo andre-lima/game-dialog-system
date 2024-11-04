@@ -1,18 +1,18 @@
 export const dialogConfig = {
   fontSize: {
-    bottomDialog: 18,
+    wideDialog: 18,
     speechBubble: 16,
   },
   dialogBackground: {
-    bottomDialog: '',
+    wideDialog: '',
     speechBubble: '',
   },
   speakerAvatar: {
     'dude-1': '',
     'dude-2': '',
   },
-  bottomDialog: {
-    position: { x: 0, y: 500 },
+  wideDialog: {
+    position: { x: 0, y: 10 },
     width: '100%',
   },
   speechBubble: {

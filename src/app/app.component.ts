@@ -19,7 +19,9 @@ import { dialogs } from './dialogs/dialogs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  constructor(private viewContainer: ViewContainerRef) {}
+  constructor(private viewContainer: ViewContainerRef) {
+    // this.loadDialog(0);
+  }
 
   loadDialog(index: number) {
     const dialogComponent: ComponentRef<GameDialogComponent> =

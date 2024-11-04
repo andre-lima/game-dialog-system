@@ -50,7 +50,7 @@ export class GameDialogComponent {
     const speaker = this.currentSpeaker() || '';
     const speakerPosition = this.store.dialog()?.position?.[speaker];
 
-    return speakerPosition || dialogConfig.bottomDialog.position;
+    return speakerPosition || dialogConfig.wideDialog.position;
   });
 
   isBubbleDialog = computed(() => {
