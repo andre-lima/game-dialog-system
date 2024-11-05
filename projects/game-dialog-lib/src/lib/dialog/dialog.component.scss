@@ -39,22 +39,6 @@
   gap: 1em;
 }
 
-.bubble {
-  &.dialog-box {
-    width: 240px;
-  }
-  .speaker-box {
-    display: none;
-  }
-  .text-box {
-    font-size: 1em;
-  }
-  .promptButtons {
-    right: -20px;
-    bottom: -10px;
-  }
-}
-
 @keyframes popUp {
   0% {
     opacity: 0;

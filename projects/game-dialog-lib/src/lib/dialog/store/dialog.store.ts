@@ -8,8 +8,10 @@ import {
 } from '@ngrx/signals';
 import { Dialog } from './dialog.model';
 import { computed, effect } from '@angular/core';
+import { dialogConfig } from '../dialog.config';
 
 type DialogState = {
+  config: typeof dialogConfig;
   dialog: Dialog | null;
   sentenceIndex: number;
   output: string;
@@ -20,6 +22,7 @@ type DialogState = {
 };
 
 const initialState: DialogState = {
+  config: dialogConfig,
   dialog: null,
   sentenceIndex: 0,
   output: '',
@@ -30,6 +33,7 @@ const initialState: DialogState = {
 };
 
 export const DialogStore = signalStore(
+  { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
     currentSentence: computed(() => {
@@ -48,6 +52,9 @@ export const DialogStore = signalStore(
     },
   }),
   withMethods((store) => ({
+    updateConfig(config: typeof dialogConfig): void {
+      patchState(store, (state) => ({ ...state, config }));
+    },
     endPrinting(): void {
       patchState(store, (state) => ({ ...state, isPrinting: false }));
     },

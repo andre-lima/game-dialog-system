@@ -9,15 +9,15 @@ import {
   inject,
   untracked,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { DialogStore } from './store/dialog.store';
 import { Dialog } from './store/dialog.model';
 import { dialogConfig } from './dialog.config';
+import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
 
 @Component({
   selector: 'game-dialog',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [CommonModule, SpeechBubbleComponent],
   providers: [DialogStore],
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
@@ -53,12 +53,6 @@ export class GameDialogComponent {
     return speakerPosition || dialogConfig.wideDialog.position;
   });
 
-  isBubbleDialog = computed(() => {
-    const speaker = this.currentSpeaker() || '';
-
-    return this.store.dialog()?.position?.[speaker];
-  });
-
   constructor() {
     effect(() => {
       const isFinished = this.store.isFinished();
@@ -87,6 +81,7 @@ export class GameDialogComponent {
           splitIndex++
         ) {
           this.store.updateOutput(splitIndex);
+          console.log('x');
           if (untracked(this.store.slowOutput)) {
             await delay(
               sentence.typingDelay ?? dialogConfig.defaultTypingDelay

@@ -3,12 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ComponentRef,
+  inject,
   Injector,
   ViewContainerRef,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GameDialogComponent } from '../../projects/game-dialog-lib/src/public-api';
 import { dialogs } from './dialogs/dialogs';
+import { GameDialogService } from '../../projects/game-dialog-lib/src/lib/dialog/dialog.service';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +21,18 @@ import { dialogs } from './dialogs/dialogs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  constructor(private viewContainer: ViewContainerRef) {
+  dialogService = inject(GameDialogService);
+  vcr = inject(ViewContainerRef);
+
+  constructor() {
     // this.loadDialog(0);
+    this.dialogService.loadConfig(this.vcr);
   }
 
   loadDialog(index: number) {
-    const dialogComponent: ComponentRef<GameDialogComponent> =
-      this.viewContainer.createComponent(GameDialogComponent);
-    dialogComponent.instance.openDialog(dialogs[index], dialogComponent);
+    this.dialogService.startDialog(dialogs[index]);
+    // const dialogComponent: ComponentRef<GameDialogComponent> =
+    //   this.viewContainer.createComponent(GameDialogComponent);
+    // dialogComponent.instance.openDialog(dialogs[index], dialogComponent);
   }
 }

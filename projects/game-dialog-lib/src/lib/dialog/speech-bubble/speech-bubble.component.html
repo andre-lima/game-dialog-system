@@ -1,0 +1,11 @@
+<div class="dialog-box bubble" [style.left]="'200px'" [style.bottom]="'200px'">
+  <div
+    class="text-box"
+    [innerHTML]="store.previousOutput() + store.output()"
+  ></div>
+
+  <button class="promptWidget" (click)="store.nextSentence()">
+    Press Space
+  </button>
+  {{ store.dialog() }}
+</div>

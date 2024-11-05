@@ -1,0 +1,30 @@
+::ng-deep {
+  .hidden {
+    opacity: 0;
+  }
+}
+
+.dialog-box {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+
+  transform: translateY(0);
+  animation: fromBottom 0.6s ease-out forwards;
+}
+
+.bubble {
+  &.dialog-box {
+    width: 240px;
+  }
+  .speaker-box {
+    display: none;
+  }
+  .text-box {
+    font-size: 1em;
+  }
+  .promptButtons {
+    right: -20px;
+    bottom: -10px;
+  }
+}

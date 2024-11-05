@@ -1,6 +1,5 @@
 <div
   class="dialog-box"
-  [ngClass]="{ bubble: isBubbleDialog() }"
   [style.left]="dialogBoxPosition().x + 'px'"
   [style.bottom]="dialogBoxPosition().y + 'px'"
   *ngIf="store.output().length > 0"
@@ -30,3 +29,5 @@
     }
   </div>
 </div>
+
+<speech-bubble></speech-bubble>

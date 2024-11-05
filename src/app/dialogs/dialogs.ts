@@ -100,6 +100,7 @@ export const dialogs: Dialog[] = [
     sentences: [
       {
         text: 'ping... x: 100',
+        typingDelay: 100,
         speaker: 'first-dude',
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
