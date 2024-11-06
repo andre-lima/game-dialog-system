@@ -48,7 +48,7 @@ export class GameDialogComponent {
 
   dialogBoxPosition = computed(() => {
     const speaker = this.currentSpeaker() || '';
-    const speakerPosition = this.store.dialog()?.position?.[speaker];
+    const speakerPosition = this.store.dialog()?.positionMapping?.[speaker];
 
     return speakerPosition || dialogConfig.wideDialog.position;
   });

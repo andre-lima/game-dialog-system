@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { DialogStore } from './store/dialog.store';
 import { dialogConfig as defaultConfig } from './dialog.config';
-import { Dialog } from './store/dialog.model';
+import { Dialog, SpeechBubblePositionMapping } from './store/dialog.model';
 import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
 
 @Injectable({ providedIn: 'root' })
 export class GameDialogService {
   store = inject(DialogStore);
   vcr: ViewContainerRef | null = null;
+  openDialogRef: ComponentRef<SpeechBubbleComponent> | undefined;
 
   constructor() {
     effect(
@@ -35,10 +36,7 @@ export class GameDialogService {
           splitIndex++
         ) {
           this.store.updateOutput(splitIndex);
-          console.log('x');
           if (untracked(this.store.slowOutput)) {
-            console.log(sentence.typingDelay);
-            console.log(config.defaultTypingDelay);
             await delay(sentence.typingDelay ?? config.defaultTypingDelay);
           } else {
             this.store.updateOutput(sentence.text.length);
@@ -54,6 +52,26 @@ export class GameDialogService {
       },
       { allowSignalWrites: true }
     );
+
+    effect(() => {
+      // console.log(this.store.dialog());
+      const sentence = this.store.currentSentence();
+      if (!sentence) return;
+
+      if (sentence?.continueOnPrevious) {
+        return;
+      }
+
+      this.openDialogRef?.destroy();
+
+      if (sentence?.showOnSpeechBubble) {
+        console.log('create new bubble');
+        this.openDialogRef = this.vcr?.createComponent(SpeechBubbleComponent);
+      } else {
+        console.log('create dialog box');
+        this.openDialogRef = this.vcr?.createComponent(SpeechBubbleComponent);
+      }
+    });
   }
 
   loadConfig(vcr: ViewContainerRef, config = defaultConfig) {
@@ -61,13 +79,8 @@ export class GameDialogService {
     this.vcr = vcr;
   }
 
-  startDialog(dialog: Dialog) {
-    this.store.updateDialog(dialog);
-    this.vcr?.createComponent(SpeechBubbleComponent);
-
-    // const speechComponent: ComponentRef<SpeechBubbleComponent> =
-    //   this.container.createComponent(SpeechBubbleComponent);
-    // dialogComponent.instance.openDialog(dialogs[index], dialogComponent);
+  startDialog(dialog: Dialog, positionMapping: SpeechBubblePositionMapping) {
+    this.store.updateDialog(dialog, positionMapping);
   }
 }
 

@@ -6,12 +6,18 @@ export type Sentence = {
   gameAction?: { beforeSentence?: () => void; afterSentence?: () => void };
   prompts?: { label?: string; action?: () => void; nextIndex?: number }[];
   chainNext?: boolean;
+  continueOnPrevious?: boolean;
+  showOnSpeechBubble?: boolean;
   classes?: string[];
 };
 
 export type Dialog = {
   id: string;
   sentences: Sentence[];
-  position?: { [speaker: string]: { x: number; y: number } };
+  positionMapping?: SpeechBubblePositionMapping;
   gameAction?: { beforeDialog?: () => void; afterDialog?: () => void };
+};
+
+export type SpeechBubblePositionMapping = {
+  [speaker: string]: { x: number; y: number };
 };

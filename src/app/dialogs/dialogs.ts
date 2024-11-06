@@ -3,10 +3,6 @@ import { Dialog } from '../../../projects/game-dialog-lib/src/lib/dialog/store/d
 export const dialogs: Dialog[] = [
   {
     id: 'npc-1',
-    gameAction: {
-      beforeDialog: () => console.log('Start of dialog'),
-      afterDialog: () => console.log('End of dialog'),
-    },
     sentences: [
       {
         text: 'Hello, and...',
@@ -73,10 +69,6 @@ export const dialogs: Dialog[] = [
   },
   {
     id: 'npc-2',
-    gameAction: {
-      beforeDialog: () => console.log('Start of dialog 2'),
-      afterDialog: () => console.log('End of dialog 2'),
-    },
     sentences: [
       {
         text: '22222 Hello, and...',
@@ -89,19 +81,23 @@ export const dialogs: Dialog[] = [
   },
   {
     id: 'npc-3',
-    gameAction: {
-      beforeDialog: () => console.log('Start of dialog 2'),
-      afterDialog: () => console.log('End of dialog 2'),
-    },
-    position: {
-      'first-dude': { x: 100, y: 300 },
-      'second-dude': { x: 300, y: 400 },
-    },
     sentences: [
       {
-        text: 'ping... x: 100',
+        text: 'ping... ',
         typingDelay: 100,
         speaker: 'first-dude',
+        showOnSpeechBubble: true,
+        chainNext: true,
+        gameAction: {
+          afterSentence: () => console.log('All cleaned...'),
+        },
+      },
+      {
+        text: 'chained',
+        continueOnPrevious: true,
+        typingDelay: 100,
+        speaker: 'first-dude',
+        showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
@@ -109,6 +105,7 @@ export const dialogs: Dialog[] = [
       {
         text: 'pong... x: 300',
         speaker: 'second-dude',
+        showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
@@ -116,12 +113,21 @@ export const dialogs: Dialog[] = [
       {
         text: 'ping... x: 100',
         speaker: 'first-dude',
+        showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
       },
       {
         text: 'and so they continued',
+        chainNext: true,
+        gameAction: {
+          afterSentence: () => console.log('All cleaned...'),
+        },
+      },
+      {
+        text: '... for a while',
+        continueOnPrevious: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
@@ -129,6 +135,7 @@ export const dialogs: Dialog[] = [
       {
         text: 'pong... x: 300',
         speaker: 'second-dude',
+        showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },

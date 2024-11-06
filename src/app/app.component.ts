@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
   inject,
   Injector,
   ViewContainerRef,
@@ -11,6 +10,7 @@ import { RouterOutlet } from '@angular/router';
 import { GameDialogComponent } from '../../projects/game-dialog-lib/src/public-api';
 import { dialogs } from './dialogs/dialogs';
 import { GameDialogService } from '../../projects/game-dialog-lib/src/lib/dialog/dialog.service';
+import { SpeechBubblePositionMapping } from '../../projects/game-dialog-lib/src/lib/dialog/store/dialog.model';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +30,11 @@ export class AppComponent {
   }
 
   loadDialog(index: number) {
-    this.dialogService.startDialog(dialogs[index]);
+    const positions: SpeechBubblePositionMapping = {
+      'first-dude': { x: 100, y: 300 },
+      'second-dude': { x: 300, y: 400 },
+    };
+    this.dialogService.startDialog(dialogs[index], positions);
     // const dialogComponent: ComponentRef<GameDialogComponent> =
     //   this.viewContainer.createComponent(GameDialogComponent);
     // dialogComponent.instance.openDialog(dialogs[index], dialogComponent);

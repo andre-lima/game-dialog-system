@@ -20,18 +20,22 @@ import { dialogConfig } from '../dialog.config';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpeechBubbleComponent {
-  // dialog = input<Dialog>();
   store = inject(DialogStore);
-  output = computed(() => {
-    console.log(this.store.output());
-    this.store.updateOutput(3);
-    return this.store.output();
-  });
 
   constructor() {
-    console.log('xxxx', this.store);
     // effect(() => {
-    //   console.log(this.store.output());
+    //   console.log('curr speaker', this.store.currentSpeaker());
     // });
   }
+
+  currentSpeaker = computed(() => {
+    return this.store.currentSentence()?.speaker;
+  });
+
+  dialogBoxPosition = computed(() => {
+    const speaker = this.currentSpeaker() || '';
+    const speakerPosition = this.store.speechBubblePositions()?.[speaker];
+
+    return speakerPosition || dialogConfig.wideDialog.position;
+  });
 }
