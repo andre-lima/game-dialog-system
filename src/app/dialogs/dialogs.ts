@@ -21,12 +21,13 @@ export const dialogs: Dialog[] = [
         },
         chainNext: true,
       },
-      // {
-      //   text: '(wait for it)',
-      //   startDelay: 500,
-      //   classes: ['small'],
-      //   chainNext: true,
-      // },
+      {
+        text: '(wait for it)',
+        startDelay: 5000,
+        classes: ['small'],
+        startOnNewLine: true,
+        chainNext: true,
+      },
       // {
       //   text: 'SYSTEM!',
       //   startDelay: 1000,
@@ -73,6 +74,16 @@ export const dialogs: Dialog[] = [
             },
           },
         ],
+      },
+      {
+        typingDelay: 500,
+        text: '. . . . . .',
+        chainNext: true,
+        classes: ['bold', 'alert'],
+      },
+      {
+        text: 'You can also press Space during a long string to output the whole text.',
+        typingDelay: 200,
       },
     ],
   },

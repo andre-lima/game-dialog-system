@@ -2,16 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
-  input,
   inject,
-  computed,
   effect,
-  OnInit,
+  untracked,
 } from '@angular/core';
-import { Dialog, Sentence } from '../store/dialog.model';
 import { DialogStore } from '../store/dialog.store';
-import { dialogConfig } from '../dialog.config';
 import { GameDialogService } from '../dialog.service';
+import { Sentence } from '../store/dialog.model';
 
 @Component({
   selector: 'typewriter-effect',
@@ -24,8 +21,14 @@ import { GameDialogService } from '../dialog.service';
 export class TypewriterEffectComponent {
   store = inject(DialogStore);
   service = inject(GameDialogService);
+  cancelDelay: (value: unknown) => void = (x) => {};
 
   constructor() {
+    effect(() => {
+      if (!this.store.slowOutput()) {
+        this.cancelDelay?.(true);
+      }
+    });
     effect(
       async () => {
         const sentence = this.store.currentSentence();
@@ -35,33 +38,44 @@ export class TypewriterEffectComponent {
           return;
         }
 
-        await delay(sentence.startDelay ?? config?.defaultStartDelay);
+        if (untracked(() => this.store.slowOutput())) {
+          await this.delay(sentence.startDelay ?? config?.defaultStartDelay);
+        }
 
         for (
           let splitIndex = 0;
           splitIndex <= sentence.text.length;
           splitIndex++
         ) {
-          this.store.updateOutput(splitIndex);
-          if (this.store.slowOutput()) {
-            await delay(sentence.typingDelay ?? config.defaultTypingDelay);
+          if (untracked(() => this.store.slowOutput())) {
+            this.store.updateOutput(splitIndex);
+            await this.delay(sentence.typingDelay ?? config.defaultTypingDelay);
           } else {
-            this.store.updateOutput(sentence.text.length);
             break;
           }
         }
 
-        if (sentence.chainNext) {
-          this.store.nextSentence();
-        } else {
-          this.store.endPrinting();
-        }
-      }
-      // { allowSignalWrites: true }
+        this.endSentence(sentence);
+      },
+      { allowSignalWrites: true }
     );
   }
-}
 
-const delay = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+  endSentence(sentence: Sentence) {
+    this.store.updateOutput(sentence.text.length);
+
+    if (sentence.chainNext) {
+      this.store.nextSentence();
+    } else {
+      this.store.endPrinting();
+    }
+  }
+
+  delay(ms: number) {
+    return new Promise((resolve) => {
+      this.cancelDelay = resolve;
+
+      return setTimeout(resolve, ms);
+    });
+  }
+}
