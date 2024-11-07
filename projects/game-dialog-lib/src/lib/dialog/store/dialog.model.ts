@@ -4,8 +4,9 @@ export type Sentence = {
   startDelay?: number;
   typingDelay?: number;
   gameAction?: { beforeSentence?: () => void; afterSentence?: () => void };
-  prompts?: { label?: string; action?: () => void; nextIndex?: number }[];
+  prompts?: { label: string; action?: () => void; nextIndex?: number }[];
   chainNext?: boolean;
+  startOnNewLine?: boolean;
   showOnSpeechBubble?: boolean;
   classes?: string[];
 };

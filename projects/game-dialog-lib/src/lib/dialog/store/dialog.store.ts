@@ -69,6 +69,7 @@ export const DialogStore = signalStore(
       patchState(store, (state) => ({ ...state, config }));
     },
     endPrinting(): void {
+      console.log('end printing');
       patchState(store, (state) => ({
         ...state,
         isPrinting: false,
@@ -81,7 +82,9 @@ export const DialogStore = signalStore(
       }));
     },
     nextSentence(nextSentenceIndex?: number): void {
+      console.log('next sentence');
       patchState(store, (state) => {
+        console.log(state.slowOutput || !store.currentSentence()?.chainNext);
         const nextIndex = nextSentenceIndex ?? state.sentenceIndex + 1;
         return {
           ...state,
@@ -92,7 +95,7 @@ export const DialogStore = signalStore(
           sentenceIndex: nextIndex,
           selectedPromptIndex: 0,
           isPrinting: true,
-          slowOutput: true,
+          slowOutput: state.slowOutput || !store.currentSentence()?.chainNext,
         };
       });
     },
@@ -141,12 +144,13 @@ export const DialogStore = signalStore(
         sentence?.text.slice(0, index),
         sentence?.text.slice(index),
       ];
+      const lineBreak = sentence?.startOnNewLine ? '<br />' : '';
 
       patchState(store, (state) => ({
         ...state,
-        output: `<span class="${(sentence?.classes || []).join(' ')}">${
-          splitText[0]
-        }</span><span class="hidden">${splitText[1]}</span> `,
+        output: `${lineBreak}<span class="${(sentence?.classes || []).join(
+          ' '
+        )}">${splitText[0]}</span><span class="hidden">${splitText[1]}</span> `,
       }));
     },
   }))
