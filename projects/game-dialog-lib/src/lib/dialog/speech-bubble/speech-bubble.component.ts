@@ -6,6 +6,7 @@ import {
   computed,
   OnInit,
   output,
+  effect,
 } from '@angular/core';
 import { DialogStore } from '../store/dialog.store';
 import { dialogConfig } from '../dialog.config';
@@ -30,6 +31,8 @@ export class SpeechBubbleComponent {
 
     return speakerPosition || dialogConfig.wideDialog.position;
   });
+
+  runSentenceAction() {}
 
   endSentence() {
     this.service.endCurrentBubbleSentence();

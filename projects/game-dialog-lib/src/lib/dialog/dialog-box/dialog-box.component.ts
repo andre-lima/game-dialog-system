@@ -28,9 +28,9 @@ export class DialogBoxComponent {
     return dialogConfig.wideDialog.position;
   });
 
-  runSentenceAction(cb: any, nextIndex?: number) {
-    cb();
-    this.service.endCurrentBoxSentence(nextIndex);
+  runSentenceAction(prompt: any) {
+    prompt.action();
+    this.service.endCurrentBoxSentence(prompt.nextIndex);
   }
 
   endSentence() {

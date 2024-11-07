@@ -20,6 +20,7 @@ type DialogState = {
   isPrinting: boolean;
   slowOutput: boolean;
   isDialogActive: boolean;
+  selectedPromptIndex: number;
 };
 
 const initialState: DialogState = {
@@ -32,6 +33,7 @@ const initialState: DialogState = {
   isPrinting: false,
   slowOutput: true,
   isDialogActive: false,
+  selectedPromptIndex: 0,
 };
 
 export const DialogStore = signalStore(
@@ -88,6 +90,7 @@ export const DialogStore = signalStore(
             : '',
           output: '',
           sentenceIndex: nextIndex,
+          selectedPromptIndex: 0,
           isPrinting: true,
           slowOutput: true,
         };
@@ -114,6 +117,23 @@ export const DialogStore = signalStore(
         isDialogActive: false,
         isPrinting: false,
       }));
+    },
+    updatePromptSelection(shift: 1 | -1) {
+      patchState(store, (state) => {
+        const promptLength = store.currentSentence()?.prompts?.length || 0;
+        let newSelectedIndex = state.selectedPromptIndex + shift;
+
+        if (newSelectedIndex < 0) {
+          newSelectedIndex = promptLength - 1;
+        } else if (newSelectedIndex >= promptLength) {
+          newSelectedIndex = 0;
+        }
+
+        return {
+          ...state,
+          selectedPromptIndex: newSelectedIndex,
+        };
+      });
     },
     updateOutput(index: number): void {
       const sentence = store.currentSentence();

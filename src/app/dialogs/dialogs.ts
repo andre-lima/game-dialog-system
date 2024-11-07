@@ -66,6 +66,12 @@ export const dialogs: Dialog[] = [
               console.log('Bye!');
             },
           },
+          {
+            label: '3rd option',
+            action: () => {
+              console.log('3333333');
+            },
+          },
         ],
       },
     ],

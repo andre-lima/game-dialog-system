@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   inject,
   Injector,
   ViewContainerRef,
@@ -10,6 +11,7 @@ import { RouterOutlet } from '@angular/router';
 import { dialogs } from './dialogs/dialogs';
 import { GameDialogService } from '../../projects/game-dialog-lib/src/lib/dialog/dialog.service';
 import { SpeechBubblePositionMapping } from '../../projects/game-dialog-lib/src/lib/dialog/store/dialog.model';
+import { DialogControls } from '../../dist/game-dialog-lib';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +22,25 @@ import { SpeechBubblePositionMapping } from '../../projects/game-dialog-lib/src/
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
+  controls: DialogControls;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      this.controls.select();
+    } else if (event.key === 'ArrowRight') {
+      this.controls.next();
+    } else if (event.key === 'ArrowLeft') {
+      this.controls.previous();
+    }
+  }
+
   dialogService = inject(GameDialogService);
   vcr = inject(ViewContainerRef);
 
   constructor() {
-    // this.loadDialog(0);
-    this.dialogService.loadConfig(this.vcr);
+    this.controls = this.dialogService.loadConfig(this.vcr);
+    this.loadDialog(0);
   }
 
   loadDialog(index: number) {

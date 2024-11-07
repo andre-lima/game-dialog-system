@@ -14,7 +14,12 @@
       @if(store.currentSentence()?.prompts; as prompts){
       <ng-container>
         @for (prompt of prompts; track prompt.label) {
-        <button (click)="runSentenceAction(prompt?.action, prompt?.nextIndex)">
+        <span
+          class="selection-arrow"
+          [ngClass]="{ transparent: store.selectedPromptIndex() !== $index }"
+          >►</span
+        >
+        <button (click)="runSentenceAction(prompt)">
           {{ prompt.label || "Next" }}
         </button>
         }
