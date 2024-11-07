@@ -1,0 +1,28 @@
+<div
+  class="dialog-box"
+  [style.left]="dialogBoxPosition().x + 'px'"
+  [style.bottom]="dialogBoxPosition().y + 'px'"
+>
+  @if(store.currentSentence()?.speaker; as speaker) {
+  <div class="speaker">{{ speaker }}</div>
+  }
+  <div class="text-box">
+    <typewriter-effect></typewriter-effect>
+
+    @if(!store.isPrinting()) {
+    <ng-container>
+      @if(store.currentSentence()?.prompts; as prompts){
+      <ng-container>
+        @for (prompt of prompts; track prompt.label) {
+        <button (click)="runSentenceAction(prompt?.action, prompt?.nextIndex)">
+          {{ prompt.label || "Next" }}
+        </button>
+        }
+      </ng-container>
+      } @else {
+      <button class="promptWidget" (click)="endSentence()">▼</button>
+      }
+    </ng-container>
+    }
+  </div>
+</div>

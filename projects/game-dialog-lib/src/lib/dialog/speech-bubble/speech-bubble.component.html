@@ -1,14 +1,15 @@
 <div
-  class="dialog-box bubble"
+  class="speech-bubble"
   [style.left]="dialogBoxPosition().x + 'px'"
   [style.bottom]="dialogBoxPosition().y + 'px'"
 >
-  <div
-    class="text-box"
-    [innerHTML]="store.previousOutput() + store.output()"
-  ></div>
-
-  <button class="promptWidget" (click)="store.nextSentence()">
+  <div class="text-box">
+    <typewriter-effect></typewriter-effect>
+  </div>
+  <!-- <button class="promptWidget" (click)="store.nextSentence()">
     Press Space
-  </button>
+  </button> -->
+  @if(!store.isPrinting()) {
+  <button class="promptWidget" (click)="endSentence()">▼</button>
+  }
 </div>

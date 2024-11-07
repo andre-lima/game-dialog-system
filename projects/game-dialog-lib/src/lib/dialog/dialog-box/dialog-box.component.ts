@@ -13,25 +13,27 @@ import { TypewriterEffectComponent } from '../typewriter-effect/typewriter-effec
 import { GameDialogService } from '../dialog.service';
 
 @Component({
-  selector: 'speech-bubble',
+  selector: 'dialog-box',
   standalone: true,
   imports: [CommonModule, TypewriterEffectComponent],
-  templateUrl: './speech-bubble.component.html',
-  styleUrl: './speech-bubble.component.scss',
+  templateUrl: './dialog-box.component.html',
+  styleUrl: './dialog-box.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpeechBubbleComponent {
+export class DialogBoxComponent {
   store = inject(DialogStore);
   service = inject(GameDialogService);
 
   dialogBoxPosition = computed(() => {
-    const speaker = this.store.currentSentence()?.speaker || '';
-    const speakerPosition = this.store.speechBubblePositions()?.[speaker];
-
-    return speakerPosition || dialogConfig.wideDialog.position;
+    return dialogConfig.wideDialog.position;
   });
 
+  runSentenceAction(cb: any, nextIndex?: number) {
+    cb();
+    this.service.endCurrentBoxSentence(nextIndex);
+  }
+
   endSentence() {
-    this.service.endCurrentBubbleSentence();
+    this.service.endCurrentBoxSentence();
   }
 }

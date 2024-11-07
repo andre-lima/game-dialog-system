@@ -6,7 +6,6 @@ export type Sentence = {
   gameAction?: { beforeSentence?: () => void; afterSentence?: () => void };
   prompts?: { label?: string; action?: () => void; nextIndex?: number }[];
   chainNext?: boolean;
-  continueOnPrevious?: boolean;
   showOnSpeechBubble?: boolean;
   classes?: string[];
 };

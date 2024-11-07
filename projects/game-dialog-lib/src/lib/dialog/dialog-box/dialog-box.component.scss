@@ -1,14 +1,22 @@
-.speech-bubble {
+.dialog-box {
   position: absolute;
   bottom: 50px;
-  width: 240px;
+  width: 100%;
 
+  padding: 1em;
   transform: translateY(0);
   animation: fromBottom 0.6s ease-out forwards;
 
-  .text-box {
-    font-size: 1em;
+  .speaker {
+    position: absolute;
+    top: 5px;
+    left: 35px;
+    background-color: goldenrod;
+  }
 
+  .text-box {
+    font-size: 1.2em;
+    height: 120px;
     border-width: 20px;
     border-style: solid;
     border-image-source: url("../assets/buttonSquare.png");
@@ -21,8 +29,8 @@
   .promptWidget {
     color: inherit;
     position: absolute;
-    right: 5px;
-    bottom: 5px;
+    right: 25px;
+    bottom: 25px;
     background-color: transparent;
     border: none;
     animation: blink-animation 0.5s steps(2, start) infinite;

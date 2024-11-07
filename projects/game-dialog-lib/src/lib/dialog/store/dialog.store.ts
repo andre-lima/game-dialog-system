@@ -19,7 +19,7 @@ type DialogState = {
   previousOutput: string;
   isPrinting: boolean;
   slowOutput: boolean;
-  isFinished: boolean;
+  isDialogActive: boolean;
 };
 
 const initialState: DialogState = {
@@ -29,9 +29,9 @@ const initialState: DialogState = {
   sentenceIndex: 0,
   output: '',
   previousOutput: '',
-  isPrinting: true,
+  isPrinting: false,
   slowOutput: true,
-  isFinished: false,
+  isDialogActive: false,
 };
 
 export const DialogStore = signalStore(
@@ -55,7 +55,10 @@ export const DialogStore = signalStore(
     onInit(store) {
       effect(() => {
         const sentence = store.currentSentence();
-        sentence?.gameAction?.beforeSentence?.();
+
+        if (sentence) {
+          sentence.gameAction?.beforeSentence?.();
+        }
       });
     },
   }),
@@ -64,13 +67,15 @@ export const DialogStore = signalStore(
       patchState(store, (state) => ({ ...state, config }));
     },
     endPrinting(): void {
-      patchState(store, (state) => ({ ...state, isPrinting: false }));
+      patchState(store, (state) => ({
+        ...state,
+        isPrinting: false,
+      }));
     },
     rushPrinting(): void {
       patchState(store, (state) => ({
         ...state,
         slowOutput: false,
-        isPrinting: false,
       }));
     },
     nextSentence(nextSentenceIndex?: number): void {
@@ -93,13 +98,21 @@ export const DialogStore = signalStore(
       positionMapping?: SpeechBubblePositionMapping
     ): void {
       patchState(store, (state) => {
-        return { ...state, dialog, speechBubblePositions: positionMapping };
+        return {
+          ...state,
+          dialog,
+          sentenceIndex: 0,
+          speechBubblePositions: positionMapping,
+          isPrinting: true,
+          isDialogActive: true,
+        };
       });
     },
     endDialog(): void {
       patchState(store, (state) => ({
         ...state,
-        isFinished: true,
+        isDialogActive: false,
+        isPrinting: false,
       }));
     },
     updateOutput(index: number): void {
@@ -114,13 +127,6 @@ export const DialogStore = signalStore(
         output: `<span class="${(sentence?.classes || []).join(' ')}">${
           splitText[0]
         }</span><span class="hidden">${splitText[1]}</span> `,
-      }));
-    },
-    clearOutput(): void {
-      patchState(store, (state) => ({
-        ...state,
-        output: '',
-        previousOutput: '',
       }));
     },
   }))

@@ -14,6 +14,7 @@ export const dialogs: Dialog[] = [
       },
       {
         text: 'Welcome to my Dialog...',
+        startDelay: 800,
         speaker: 'second-dude',
         gameAction: {
           beforeSentence: () => console.log('WELCOME'),
@@ -49,9 +50,11 @@ export const dialogs: Dialog[] = [
       // },
       {
         text: 'And you can pass custom prompts to answer questions or branch conversations.',
+        speaker: 'second-dude',
+        typingDelay: 15,
         prompts: [
           {
-            label: 'Say hi and to go beginning',
+            label: 'Say hi and go to beginning',
             action: () => {
               console.log('Hi!');
             },
@@ -94,17 +97,18 @@ export const dialogs: Dialog[] = [
       },
       {
         text: 'chained',
-        continueOnPrevious: true,
         typingDelay: 100,
         speaker: 'first-dude',
         showOnSpeechBubble: true,
         gameAction: {
+          beforeSentence: () => console.log('before sentence'),
           afterSentence: () => console.log('All cleaned...'),
         },
       },
       {
         text: 'pong... x: 300',
         speaker: 'second-dude',
+        classes: ['blink', 'success'],
         showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
@@ -127,7 +131,12 @@ export const dialogs: Dialog[] = [
       },
       {
         text: '... for a while',
-        continueOnPrevious: true,
+        gameAction: {
+          afterSentence: () => console.log('All cleaned...'),
+        },
+      },
+      {
+        text: 'and a while',
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
         },
