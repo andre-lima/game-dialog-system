@@ -1,14 +1,16 @@
 <div
   class="speech-bubble"
+  [class]="[
+    store.dialog()?.containerClass ?? '',
+    store.currentSentence()?.speaker ?? ''
+  ]"
   [style.left]="dialogBoxPosition().x + 'px'"
-  [style.bottom]="dialogBoxPosition().y + 'px'"
+  [style.top]="dialogBoxPosition().y + 'px'"
 >
   <div class="text-box">
     <typewriter-effect></typewriter-effect>
   </div>
-  <!-- <button class="promptWidget" (click)="store.nextSentence()">
-    Press Space
-  </button> -->
+
   @if(!store.isPrinting()) {
   <button class="promptWidget" (click)="endSentence()">▼</button>
   }

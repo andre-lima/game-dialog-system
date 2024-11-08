@@ -9,11 +9,15 @@ export type Sentence = {
   startOnNewLine?: boolean;
   showOnSpeechBubble?: boolean;
   classes?: string[];
+
+  /** Will finish the dialog after the current sentence ends. */
+  endDialog?: boolean;
 };
 
 export type Dialog = {
   id: string;
   sentences: Sentence[];
+  containerClass?: string;
   positionMapping?: SpeechBubblePositionMapping;
   gameAction?: { beforeDialog?: () => void; afterDialog?: () => void };
 };

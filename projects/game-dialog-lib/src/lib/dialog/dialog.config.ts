@@ -1,4 +1,31 @@
-export const dialogConfig = {
+export type DialogConfig = {
+  fontSize: {
+    wideDialog: number;
+    speechBubble: number;
+  };
+  dialogBackground: {
+    wideDialog: string;
+    speechBubble: string;
+  };
+  speakerNames: { [id: string]: string };
+  speakerAvatar: { [id: string]: string };
+  wideDialog: {
+    position: { x: number; y: number };
+    width: string;
+  };
+  speechBubble: {
+    positionOffset: { x: number; y: number };
+  };
+  defaultTypingDelay: number;
+  defaultStartDelay: number;
+  prompt: {
+    defaultPromptMessage: string;
+    promptIcon: string;
+    blinkIcon: false;
+  };
+};
+
+export const dialogConfig: DialogConfig = {
   fontSize: {
     wideDialog: 18,
     speechBubble: 16,
@@ -7,10 +34,8 @@ export const dialogConfig = {
     wideDialog: '',
     speechBubble: '',
   },
-  speakerAvatar: {
-    'dude-1': '',
-    'dude-2': '',
-  },
+  speakerNames: {},
+  speakerAvatar: {},
   wideDialog: {
     position: { x: 0, y: 10 },
     width: '100%',

@@ -1,10 +1,11 @@
 <div
   class="dialog-box"
+  [ngClass]="[store.dialog()?.containerClass, store.currentSentence()?.speaker]"
   [style.left]="dialogBoxPosition().x + 'px'"
-  [style.bottom]="dialogBoxPosition().y + 'px'"
+  [style.top]="dialogBoxPosition().y + 'px'"
 >
   @if(store.currentSentence()?.speaker; as speaker) {
-  <div class="speaker">{{ speaker }}</div>
+  <div class="speaker">{{ store.config().speakerNames[speaker] }}</div>
   }
   <div class="text-box">
     <typewriter-effect></typewriter-effect>

@@ -3,13 +3,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "strictPropertyInitialization": false,
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
     "types": []
   },
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "exclude": ["**/*.spec.ts"]
 }

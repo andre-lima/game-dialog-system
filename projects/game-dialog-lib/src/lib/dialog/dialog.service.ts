@@ -5,7 +5,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DialogStore } from './store/dialog.store';
-import { dialogConfig as defaultConfig } from './dialog.config';
+import { dialogConfig as defaultConfig, DialogConfig } from './dialog.config';
 import { Dialog, SpeechBubblePositionMapping } from './store/dialog.model';
 import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
@@ -43,8 +43,8 @@ export class GameDialogService {
     | ComponentRef<SpeechBubbleComponent | DialogBoxComponent>
     | undefined;
 
-  loadConfig(vcr: ViewContainerRef, config = defaultConfig) {
-    this.store.updateConfig(config);
+  loadConfig(vcr: ViewContainerRef, configOveride?: Partial<DialogConfig>) {
+    this.store.updateConfig({ ...defaultConfig, ...configOveride });
     this.vcr = vcr;
 
     return this.controls;
@@ -68,6 +68,12 @@ export class GameDialogService {
   }
 
   endCurrentBoxSentence(nextIndex?: number) {
+    if (this.store.currentSentence()?.endDialog) {
+      this.store.endDialog();
+      this.openDialogRef?.destroy();
+      return;
+    }
+
     this.store.nextSentence(nextIndex);
 
     const nextSentence = this.store.currentSentence();
@@ -85,6 +91,12 @@ export class GameDialogService {
 
   endCurrentBubbleSentence() {
     this.openDialogRef?.destroy();
+
+    if (this.store.currentSentence()?.endDialog) {
+      this.store.endDialog();
+      return;
+    }
+
     this.store.nextSentence();
 
     if (this.store.currentSentence()) {

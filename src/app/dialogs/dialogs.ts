@@ -88,14 +88,67 @@ export const dialogs: Dialog[] = [
     ],
   },
   {
-    id: 'npc-2',
+    id: 'robbery',
+    containerClass: 'robbery-scene',
     sentences: [
       {
-        text: '22222 Hello, and...',
-        speaker: 'first-dude',
-        gameAction: {
-          afterSentence: () => console.log('All cleaned...'),
-        },
+        text: 'HANDS UP!',
+        speaker: 'mean-thief',
+        typingDelay: 30,
+      },
+      {
+        text: 'This is a robbery...',
+        speaker: 'mean-thief',
+        chainNext: true,
+      },
+      {
+        text: 'Veeeryyyy slowlyyyyy...',
+        speaker: 'mean-thief',
+        startDelay: 500,
+        startOnNewLine: true,
+        typingDelay: 200,
+      },
+      {
+        text: 'HEEELPPP!',
+        speaker: 'victim',
+        showOnSpeechBubble: true,
+      },
+      {
+        text: "I'm being robbed!",
+        speaker: 'victim',
+        showOnSpeechBubble: true,
+      },
+      {
+        text: "You'll regret this...",
+        speaker: 'mean-thief',
+        prompts: [
+          {
+            label: 'Shoot him',
+            nextIndex: 6,
+          },
+          {
+            label: 'Steal his shit',
+            nextIndex: 7,
+          },
+          {
+            label: 'Run',
+            nextIndex: 8,
+          },
+        ],
+      },
+      {
+        text: 'BANG!',
+        showOnSpeechBubble: true,
+        endDialog: true,
+      },
+      {
+        text: 'Gimme that!',
+        showOnSpeechBubble: true,
+        endDialog: true,
+      },
+      {
+        text: 'Not worth it...',
+        showOnSpeechBubble: true,
       },
     ],
   },

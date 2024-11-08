@@ -8,7 +8,6 @@ import {
   output,
 } from '@angular/core';
 import { DialogStore } from '../store/dialog.store';
-import { dialogConfig } from '../dialog.config';
 import { TypewriterEffectComponent } from '../typewriter-effect/typewriter-effect.component';
 import { GameDialogService } from '../dialog.service';
 
@@ -25,11 +24,11 @@ export class DialogBoxComponent {
   service = inject(GameDialogService);
 
   dialogBoxPosition = computed(() => {
-    return dialogConfig.wideDialog.position;
+    return this.store.config.wideDialog.position;
   });
 
   runSentenceAction(prompt: any) {
-    prompt.action();
+    prompt?.action?.();
     this.service.endCurrentBoxSentence(prompt.nextIndex);
   }
 
