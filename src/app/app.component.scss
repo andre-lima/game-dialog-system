@@ -1,7 +1,48 @@
-::ng-deep {
-  .robbery-scene {
-    &.victim {
-      font-family: cursive;
-    }
-  }
-}
+// .victim {
+//   font-family: cursive;
+// }
+// ::ng-deep {
+//   .robbery-scene {
+//     &.victim {
+//       font-family: cursive;
+//     }
+//   }
+//   .dialog-box {
+//     .text-box {
+//       font-size: 1.2em;
+//       height: 120px;
+//       border-width: 20px;
+//       border-style: solid;
+//       border-image-source: url("./assets/buttonSquare.png");
+//       border-image-slice: 20 fill;
+//       padding: 5px 10px;
+//       width: 100%;
+//       background-color: transparent;
+//     }
+//   }
+
+//   .speech-bubble {
+//     .text-box {
+//       font-size: 1em;
+//       // border-width: 2px;
+//       border-style: solid;
+//       border-image-repeat: stretch;
+//       border-image-width: 3px 3px 8px 30px;
+//       border-image-source: url("./assets/bubble.png");
+//       border-image-slice: 3 3 8 30 fill;
+//       padding: 5px 15px 10px 10px;
+//       width: 100%;
+//       background-color: transparent;
+//     }
+
+//     .promptWidget {
+//       color: inherit;
+//       position: absolute;
+//       right: 0;
+//       bottom: 7px;
+//       background-color: transparent;
+//       border: none;
+//       animation: blink-animation 0.5s steps(2, start) infinite;
+//     }
+//   }
+// }

@@ -6,6 +6,7 @@ import {
   computed,
   OnInit,
   output,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DialogStore } from '../store/dialog.store';
 import { TypewriterEffectComponent } from '../typewriter-effect/typewriter-effect.component';
@@ -18,6 +19,7 @@ import { GameDialogService } from '../dialog.service';
   templateUrl: './dialog-box.component.html',
   styleUrl: './dialog-box.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class DialogBoxComponent {
   store = inject(DialogStore);

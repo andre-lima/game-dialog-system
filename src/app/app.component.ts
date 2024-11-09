@@ -5,16 +5,15 @@ import {
   Component,
   HostListener,
   inject,
-  Injector,
   ViewContainerRef,
 } from '@angular/core';
-import { Engine, Color, Actor, vec } from 'excalibur';
-import { RouterOutlet } from '@angular/router';
+import { Engine, Color, Actor, vec, CollisionType } from 'excalibur';
 import { dialogs } from './dialogs/dialogs';
 import { GameDialogService } from '../../projects/game-dialog-lib/src/lib/dialog/dialog.service';
 import { SpeechBubblePositionMapping } from '../../projects/game-dialog-lib/src/lib/dialog/store/dialog.model';
 import { DialogControls } from '../../dist/game-dialog-lib';
 import { DialogConfig } from '../../dist/game-dialog-lib/lib/dialog/dialog.config';
+import { DialogManagerComponent } from './game/components/dialog-component';
 
 @Component({
   selector: 'app-root',
@@ -62,7 +61,7 @@ export class AppComponent implements AfterViewInit {
     });
 
     const actor1 = new Actor({
-      x: 100,
+      x: 40,
       y: 100,
       color: Color.Vermilion,
       name: 'mean-thief',
@@ -73,7 +72,7 @@ export class AppComponent implements AfterViewInit {
     const actor2 = new Actor({
       x: 300,
       y: 120,
-      color: Color.Magenta,
+      color: Color.Green,
       name: 'victim',
       width: 50,
       height: 50,
@@ -89,13 +88,9 @@ export class AppComponent implements AfterViewInit {
     // positions and send to the dialog system
     // Trigger custom events on start and end of dialogs
 
-    actor2.on('collisionstart', () => {
-      actor1.vel.x = 0;
-      this.dialogService.startDialog(dialogs[1], {
-        [actor1.name]: actor1.pos.add(vec(-100, -100)),
-        [actor2.name]: actor2.pos.add(vec(-100, -100)),
-      });
-    });
+    actor2.addComponent(new DialogManagerComponent(this.dialogService));
+
+    this.game.toggleDebug();
 
     this.game.start();
   }

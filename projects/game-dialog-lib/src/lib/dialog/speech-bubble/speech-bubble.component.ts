@@ -4,9 +4,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
-  OnInit,
-  output,
-  effect,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DialogStore } from '../store/dialog.store';
 import { dialogConfig } from '../dialog.config';
@@ -20,6 +18,7 @@ import { GameDialogService } from '../dialog.service';
   templateUrl: './speech-bubble.component.html',
   styleUrl: './speech-bubble.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class SpeechBubbleComponent {
   store = inject(DialogStore);

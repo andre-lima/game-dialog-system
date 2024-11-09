@@ -1,0 +1,63 @@
+.victim {
+  font-family: cursive;
+}
+.robbery-scene {
+  &.victim {
+    font-family: cursive;
+  }
+}
+.dialog-box {
+  .text-box {
+    font-size: 1.5em;
+    border-width: 20px;
+    border-style: solid;
+    border-image-width: 20px;
+    border-image-source: url("./app/assets/buttonSquare.png");
+    border-image-slice: 20 fill;
+    background-color: transparent;
+  }
+}
+
+.speech-bubble {
+  .text-box {
+    border-style: solid;
+    border-image-repeat: stretch;
+    border-image-width: 3px 3px 8px 30px;
+    border-image-source: url("./app/assets/bubble.png");
+    border-image-slice: 3 3 8 30 fill;
+    padding: 5px 15px 10px 10px;
+    width: 100%;
+    background-color: transparent;
+  }
+
+  .promptWidget {
+    color: inherit;
+    position: absolute;
+    right: 0;
+    bottom: 7px;
+    background-color: transparent;
+    border: none;
+    animation: blink-animation 0.5s steps(2, start) infinite;
+  }
+}
+
+.bold {
+  font-weight: bolder;
+}
+
+.success {
+  color: var(--success);
+}
+
+.alert {
+  color: var(--alert);
+}
+
+.blink {
+  animation: blink-animation 0.5s steps(2, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}

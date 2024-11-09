@@ -17,7 +17,6 @@ export type Sentence = {
 export type Dialog = {
   id: string;
   sentences: Sentence[];
-  containerClass?: string;
   positionMapping?: SpeechBubblePositionMapping;
   gameAction?: { beforeDialog?: () => void; afterDialog?: () => void };
 };

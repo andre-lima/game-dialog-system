@@ -1,32 +1,26 @@
 .speech-bubble {
   position: absolute;
   top: 50px;
-  width: 240px;
-
+  min-width: 100px;
   transform: translateY(0);
   animation: fromBottom 0.6s ease-out forwards;
+}
 
-  .text-box {
-    font-size: 1em;
+.text-box {
+  font-size: 1em;
+  padding: 5px 10px;
+  width: 100%;
+  background-color: #ddd;
+}
 
-    border-width: 20px;
-    border-style: solid;
-    border-image-source: url("../assets/buttonSquare.png");
-    border-image-slice: 20 fill;
-    padding: 5px 10px;
-    width: 100%;
-    // background-color: #ddd;
-  }
-
-  .promptWidget {
-    color: inherit;
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-    background-color: transparent;
-    border: none;
-    animation: blink-animation 0.5s steps(2, start) infinite;
-  }
+.promptWidget {
+  color: inherit;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  background-color: transparent;
+  border: none;
+  animation: blink-animation 0.5s steps(2, start) infinite;
 }
 
 @keyframes popUp {
@@ -60,12 +54,6 @@
   }
   100% {
     transform: translateY(0px);
-  }
-}
-
-@keyframes blink-animation {
-  to {
-    opacity: 0;
   }
 }
 

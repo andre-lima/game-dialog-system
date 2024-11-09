@@ -1,9 +1,6 @@
 <div
   class="speech-bubble"
-  [class]="[
-    store.dialog()?.containerClass ?? '',
-    store.currentSentence()?.speaker ?? ''
-  ]"
+  [class]="[store.dialog()?.id ?? '', store.currentSentence()?.speaker ?? '']"
   [style.left]="dialogBoxPosition().x + 'px'"
   [style.top]="dialogBoxPosition().y + 'px'"
 >

@@ -88,8 +88,7 @@ export const dialogs: Dialog[] = [
     ],
   },
   {
-    id: 'robbery',
-    containerClass: 'robbery-scene',
+    id: 'robbery-scene',
     sentences: [
       {
         text: 'HANDS UP!',
@@ -140,14 +139,17 @@ export const dialogs: Dialog[] = [
         text: 'BANG!',
         showOnSpeechBubble: true,
         endDialog: true,
+        speaker: 'mean-thief',
       },
       {
         text: 'Gimme that!',
         showOnSpeechBubble: true,
+        speaker: 'mean-thief',
         endDialog: true,
       },
       {
         text: 'Not worth it...',
+        speaker: 'mean-thief',
         showOnSpeechBubble: true,
       },
     ],
@@ -158,7 +160,7 @@ export const dialogs: Dialog[] = [
       {
         text: 'ping... ',
         typingDelay: 100,
-        speaker: 'first-dude',
+        speaker: 'mean-thief',
         showOnSpeechBubble: true,
         chainNext: true,
         gameAction: {
@@ -168,7 +170,7 @@ export const dialogs: Dialog[] = [
       {
         text: 'chained',
         typingDelay: 100,
-        speaker: 'first-dude',
+        speaker: 'mean-thief',
         showOnSpeechBubble: true,
         gameAction: {
           beforeSentence: () => console.log('before sentence'),
@@ -177,7 +179,7 @@ export const dialogs: Dialog[] = [
       },
       {
         text: 'pong... x: 300',
-        speaker: 'second-dude',
+        speaker: 'victim',
         classes: ['blink', 'success'],
         showOnSpeechBubble: true,
         gameAction: {
@@ -186,7 +188,7 @@ export const dialogs: Dialog[] = [
       },
       {
         text: 'ping... x: 100',
-        speaker: 'first-dude',
+        speaker: 'mean-thief',
         showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
@@ -213,7 +215,7 @@ export const dialogs: Dialog[] = [
       },
       {
         text: 'pong... x: 300',
-        speaker: 'second-dude',
+        speaker: 'victim',
         showOnSpeechBubble: true,
         gameAction: {
           afterSentence: () => console.log('All cleaned...'),
