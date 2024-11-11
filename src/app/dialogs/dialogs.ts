@@ -118,7 +118,7 @@ export const dialogs: Dialog[] = [
         showOnSpeechBubble: true,
       },
       {
-        text: "You'll regret this...",
+        text: '',
         speaker: 'mean-thief',
         prompts: [
           {

@@ -7,13 +7,15 @@ import {
   inject,
   ViewContainerRef,
 } from '@angular/core';
-import { Engine, Color, Actor, vec, CollisionType } from 'excalibur';
+import { Engine, Color, Actor } from 'excalibur';
 import { dialogs } from './dialogs/dialogs';
 import { GameDialogService } from '../../projects/game-dialog-lib/src/lib/dialog/dialog.service';
 import { SpeechBubblePositionMapping } from '../../projects/game-dialog-lib/src/lib/dialog/store/dialog.model';
 import { DialogControls } from '../../dist/game-dialog-lib';
 import { DialogConfig } from '../../dist/game-dialog-lib/lib/dialog/dialog.config';
 import { DialogManagerComponent } from './game/components/dialog-component';
+import { BehaviorSubject } from 'rxjs';
+import { Player } from './game/player';
 
 @Component({
   selector: 'app-root',
@@ -60,7 +62,7 @@ export class AppComponent implements AfterViewInit {
       canvasElementId: 'game',
     });
 
-    const actor1 = new Actor({
+    const actor1 = new Player({
       x: 40,
       y: 100,
       color: Color.Vermilion,
@@ -95,6 +97,7 @@ export class AppComponent implements AfterViewInit {
     this.game.start();
   }
 
+  // For testing with the buttons
   loadDialog(index: number) {
     const positions: SpeechBubblePositionMapping = {
       'first-dude': { x: 100, y: 300 },

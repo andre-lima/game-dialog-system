@@ -1,20 +1,22 @@
 import {
   Actor,
   CircleCollider,
-  Component,
-  Entity,
-  Trigger,
+  Component as ExComponent,
   vec,
   Vector,
 } from 'excalibur';
 import { GameDialogService } from '../../../../projects/game-dialog-lib/src/public-api';
 import { dialogs } from '../../dialogs/dialogs';
+import { Component, inject, OnInit } from '@angular/core';
 
-export class DialogManagerComponent extends Component {
+@Component({ template: '' })
+export class DialogManagerComponent extends ExComponent {
   // player position
   // list of dialogs
   // spritesheets for the animatons
   // name mapping
+  // how to trigger dialog actions affection player
+  // state/store/event system
 
   // trigger area
   // prompt to show: "(A) to talk"
@@ -40,12 +42,18 @@ export class DialogManagerComponent extends Component {
     trigger.on('collisionstart', (collision) => {
       if (collision.other === owner) return;
 
-      collision.other.vel.x = 0;
+      this.dialogService.openDialogPrompt(owner.pos.add(vec(-30, 0)));
 
-      this.dialogService.startDialog(dialogs[1], {
-        [collision.other.name]: collision.other.pos.add(vec(0, -70)),
-        [owner.name]: owner.pos.add(vec(0, -70)),
-      });
+      // collision.other.vel.x = 0;
+
+      // this.dialogService.startDialog(dialogs[1], {
+      //   [collision.other.name]: collision.other.pos.add(vec(0, -70)),
+      //   [owner.name]: owner.pos.add(vec(0, -70)),
+      // });
+    });
+
+    trigger.on('collisionend', () => {
+      this.dialogService.closeDialogPrompt();
     });
 
     owner.addChild(trigger);

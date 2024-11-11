@@ -9,6 +9,7 @@ import { dialogConfig as defaultConfig, DialogConfig } from './dialog.config';
 import { Dialog, SpeechBubblePositionMapping } from './store/dialog.model';
 import { SpeechBubbleComponent } from './speech-bubble/speech-bubble.component';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
+import { DialogPromptComponent } from './dialog-prompt/dialog-prompt.component';
 
 export type DialogControls = {
   select: () => void;
@@ -42,6 +43,7 @@ export class GameDialogService {
   openDialogRef:
     | ComponentRef<SpeechBubbleComponent | DialogBoxComponent>
     | undefined;
+  openPromptRef: ComponentRef<DialogPromptComponent> | undefined;
 
   loadConfig(vcr: ViewContainerRef, configOveride?: Partial<DialogConfig>) {
     this.store.updateConfig({ ...defaultConfig, ...configOveride });
@@ -65,6 +67,15 @@ export class GameDialogService {
     } else {
       this.openDialogRef = this.vcr?.createComponent(DialogBoxComponent);
     }
+  }
+
+  openDialogPrompt(position: { x: number; y: number }) {
+    this.openPromptRef = this.vcr?.createComponent(DialogPromptComponent);
+    this.openPromptRef?.setInput('position', position);
+  }
+
+  closeDialogPrompt() {
+    this.openPromptRef?.destroy();
   }
 
   endCurrentBoxSentence(nextIndex?: number) {
