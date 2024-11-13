@@ -52,8 +52,17 @@ export class GameDialogService {
     return this.controls;
   }
 
+  isDialogActive() {
+    return this.store.isDialogActive();
+  }
+
+  isDialogPromptActive() {
+    return this.store.isPromptActive();
+  }
+
   startDialog(dialog: Dialog, positionMapping: SpeechBubblePositionMapping) {
     if (!this.store.isDialogActive()) {
+      this.closeDialogPrompt();
       this.store.updateDialog(dialog, positionMapping);
       this.openDialog();
     }
@@ -72,10 +81,12 @@ export class GameDialogService {
   openDialogPrompt(position: { x: number; y: number }) {
     this.openPromptRef = this.vcr?.createComponent(DialogPromptComponent);
     this.openPromptRef?.setInput('position', position);
+    this.store.updateDialogPrompt(true);
   }
 
   closeDialogPrompt() {
     this.openPromptRef?.destroy();
+    this.store.updateDialogPrompt(false);
   }
 
   endCurrentBoxSentence(nextIndex?: number) {

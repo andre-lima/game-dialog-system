@@ -20,6 +20,7 @@ type DialogState = {
   isPrinting: boolean;
   slowOutput: boolean;
   isDialogActive: boolean;
+  isPromptActive: boolean;
   selectedPromptIndex: number;
 };
 
@@ -33,6 +34,7 @@ const initialState: DialogState = {
   isPrinting: false,
   slowOutput: true,
   isDialogActive: false,
+  isPromptActive: false,
   selectedPromptIndex: 0,
 };
 
@@ -78,6 +80,12 @@ export const DialogStore = signalStore(
       patchState(store, (state) => ({
         ...state,
         slowOutput: false,
+      }));
+    },
+    updateDialogPrompt(isOpen: boolean): void {
+      patchState(store, (state) => ({
+        ...state,
+        isPromptActive: isOpen,
       }));
     },
     nextSentence(nextSentenceIndex?: number): void {

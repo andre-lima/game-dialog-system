@@ -2,15 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
-  inject,
-  computed,
   ViewEncapsulation,
   input,
 } from '@angular/core';
-import { DialogStore } from '../store/dialog.store';
-import { dialogConfig } from '../dialog.config';
-import { TypewriterEffectComponent } from '../typewriter-effect/typewriter-effect.component';
-import { GameDialogService } from '../dialog.service';
 
 @Component({
   selector: 'dialog-prompt',
