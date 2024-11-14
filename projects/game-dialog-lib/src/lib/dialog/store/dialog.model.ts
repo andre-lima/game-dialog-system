@@ -4,7 +4,7 @@ export type Sentence = {
   startDelay?: number;
   typingDelay?: number;
   gameAction?: { beforeSentence?: () => void; afterSentence?: () => void };
-  prompts?: { label: string; action?: () => void; nextIndex?: number }[];
+  prompts?: SentencePrompts[];
   chainNext?: boolean;
   startOnNewLine?: boolean;
   showOnSpeechBubble?: boolean;
@@ -12,6 +12,13 @@ export type Sentence = {
 
   /** Will finish the dialog after the current sentence ends. */
   endDialog?: boolean;
+};
+
+export type SentencePrompts = {
+  label: string;
+  action?: () => void;
+  nextIndex?: number;
+  nextDialog?: string;
 };
 
 export type Dialog = {

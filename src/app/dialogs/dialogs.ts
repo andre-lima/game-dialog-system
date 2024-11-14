@@ -154,6 +154,14 @@ export const dialogs: Dialog[] = [
       },
     ],
   },
+  // {
+  //   id: 'npc-2-bang',
+  //   sentences: [
+  //     {
+  //       text: 'independent bang motherfucker... ',
+  //     },
+  //   ],
+  // },
   {
     id: 'npc-3',
     sentences: [

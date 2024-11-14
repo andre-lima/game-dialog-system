@@ -67,6 +67,7 @@ export class AppComponent implements AfterViewInit {
 
     this.game.dialogService = this.dialogService;
     this.controls = this.game.dialogService.loadConfig(
+      dialogs,
       this.vcr,
       configOverride
     );

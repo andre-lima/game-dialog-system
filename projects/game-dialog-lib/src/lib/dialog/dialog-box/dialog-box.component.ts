@@ -11,6 +11,7 @@ import {
 import { DialogStore } from '../store/dialog.store';
 import { TypewriterEffectComponent } from '../typewriter-effect/typewriter-effect.component';
 import { GameDialogService } from '../dialog.service';
+import { SentencePrompts } from '../store/dialog.model';
 
 @Component({
   selector: 'dialog-box',
@@ -29,8 +30,9 @@ export class DialogBoxComponent {
     return this.store.config.wideDialog.position;
   });
 
-  runSentenceAction(prompt: any) {
-    prompt?.action?.();
+  runSentenceAction(prompt: SentencePrompts) {
+    prompt.action?.();
+
     this.service.endCurrentBoxSentence(prompt.nextIndex);
   }
 

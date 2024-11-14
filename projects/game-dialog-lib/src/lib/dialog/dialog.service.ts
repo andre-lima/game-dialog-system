@@ -32,7 +32,9 @@ export class GameDialogService {
             this.store.currentSentence()?.prompts?.[
               this.store.selectedPromptIndex()
             ];
-          this.openDialogRef?.instance.runSentenceAction(prompt);
+          if (prompt) {
+            this.openDialogRef?.instance.runSentenceAction(prompt);
+          }
         }
       }
     },
@@ -45,7 +47,12 @@ export class GameDialogService {
     | undefined;
   openPromptRef: ComponentRef<DialogPromptComponent> | undefined;
 
-  loadConfig(vcr: ViewContainerRef, configOveride?: Partial<DialogConfig>) {
+  loadConfig(
+    dialogs: Dialog[],
+    vcr: ViewContainerRef,
+    configOveride?: Partial<DialogConfig>
+  ) {
+    this.store.updateDialogsList(dialogs);
     this.store.updateConfig({ ...defaultConfig, ...configOveride });
     this.vcr = vcr;
 
@@ -60,8 +67,17 @@ export class GameDialogService {
     return this.store.isPromptActive();
   }
 
-  startDialog(dialog: Dialog, positionMapping: SpeechBubblePositionMapping) {
-    if (!this.store.isDialogActive()) {
+  getDialogById(id: string) {
+    const dialog = this.store.dialogs().find((dialog) => {
+      return dialog.id === id;
+    });
+
+    return dialog;
+  }
+
+  startDialog(dialogId: string, positionMapping?: SpeechBubblePositionMapping) {
+    const dialog = this.getDialogById(dialogId);
+    if (dialog && !this.store.isDialogActive()) {
       this.closeDialogPrompt();
       this.store.updateDialog(dialog, positionMapping);
       this.openDialog();

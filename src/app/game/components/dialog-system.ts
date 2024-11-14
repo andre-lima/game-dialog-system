@@ -16,6 +16,8 @@ export class DialogSystem extends System {
   engine: Engine;
   focusedEntity: Actor;
 
+  previousEntityMapSize = 0;
+
   constructor(world: World) {
     super();
   }
@@ -31,14 +33,25 @@ export class DialogSystem extends System {
   }
 
   update() {
-    this.focusedEntity = [...DialogSystem.activePromptEntities]?.[0]?.[1];
+    // Avoids closing and reopening the dialog prompt unless there was a
+    // change in the components that the player is overlapping.
+    const updateFocusedEntity =
+      this.previousEntityMapSize !== DialogSystem.activePromptEntities.size;
+    this.previousEntityMapSize = DialogSystem.activePromptEntities.size;
 
-    this.engine.dialogService.closeDialogPrompt();
-    if (
-      DialogSystem.activePromptEntities.size > 0 &&
-      !this.engine.dialogService.isDialogPromptActive()
-    ) {
-      this.engine.dialogService.openDialogPrompt(this.focusedEntity.pos);
+    if (updateFocusedEntity) {
+      this.focusedEntity = [...DialogSystem.activePromptEntities]?.[0]?.[1];
+
+      if (this.engine.dialogService.isDialogPromptActive()) {
+        this.engine.dialogService.closeDialogPrompt();
+      }
+
+      if (
+        DialogSystem.activePromptEntities.size > 0 &&
+        !this.engine.dialogService.isDialogPromptActive()
+      ) {
+        this.engine.dialogService.openDialogPrompt(this.focusedEntity.pos);
+      }
     }
   }
 }

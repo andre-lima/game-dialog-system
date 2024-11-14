@@ -6,12 +6,14 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
+import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { Dialog, SpeechBubblePositionMapping } from './dialog.model';
 import { computed, effect } from '@angular/core';
 import { dialogConfig } from '../dialog.config';
 
 type DialogState = {
   config: typeof dialogConfig;
+  dialogs: Dialog[];
   dialog: Dialog | null;
   speechBubblePositions: SpeechBubblePositionMapping | null;
   sentenceIndex: number;
@@ -26,6 +28,7 @@ type DialogState = {
 
 const initialState: DialogState = {
   config: dialogConfig,
+  dialogs: [],
   dialog: null,
   speechBubblePositions: null,
   sentenceIndex: 0,
@@ -40,6 +43,7 @@ const initialState: DialogState = {
 
 export const DialogStore = signalStore(
   { providedIn: 'root' },
+  withDevtools('dialog'),
   withState(initialState),
   withComputed((store) => ({
     currentSentence: computed(() => {
@@ -67,6 +71,9 @@ export const DialogStore = signalStore(
     },
   }),
   withMethods((store) => ({
+    updateDialogsList(dialogs: Dialog[]): void {
+      patchState(store, (state) => ({ ...state, dialogs }));
+    },
     updateConfig(config: typeof dialogConfig): void {
       patchState(store, (state) => ({ ...state, config }));
     },
