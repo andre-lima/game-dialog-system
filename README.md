@@ -1,27 +1,44 @@
-# DialogSystem
+# TODO
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.10.
+## Split store into
 
-## Development server
+dialog list
+characters dialog list
+current dialog
+ - characters positions
+current prompt
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Events
 
-## Code scaffolding
+Prompt actions triggering events
+Test events in angular app to trigger game stuff (make someone run or disappear)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Cleanup
 
-## Build
+Store code
+Service
+Styling - variables and stuff
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Library
 
-## Running unit tests
+Export Ex Lib so i can use with angular app
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Game menu (angular lib)
 
-## Running end-to-end tests
+simple start menu
+simple pause menu
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Final demo
 
-## Further help
+demo scene using:
+movement
+npc dialogs (bubble and box)
+signs
+custom game events (activated by prompts)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Future
+
+Inventory
+skill tree
+battle system
+saving/loading
