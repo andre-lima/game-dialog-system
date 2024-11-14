@@ -16,6 +16,7 @@ import { DialogConfig } from '../../dist/game-dialog-lib/lib/dialog/dialog.confi
 import { DialogManagerComponent } from './game/components/dialog-component';
 import { Player } from './game/player';
 import { DialogSystem } from './game/components/dialog-system';
+import { charactersDialogs } from './dialogs/characters-dialogs';
 
 declare module 'excalibur' {
   interface Engine {
@@ -129,12 +130,21 @@ export class AppComponent implements AfterViewInit {
   }
 
   // For testing with the buttons
-  loadDialog(index: number) {
+  loadDialog(characterId: string) {
+    if (this.dialogService.isDialogActive()) return;
+
+    const characterDialog = charactersDialogs[characterId];
+    const dialogId = characterDialog.dialogIds[characterDialog.read];
+    characterDialog.read = Math.min(
+      characterDialog.read + 1,
+      characterDialog.dialogIds.length - 1
+    );
+
     const positions: SpeechBubblePositionMapping = {
       'first-dude': { x: 100, y: 300 },
       'second-dude': { x: 300, y: 400 },
     };
 
-    this.dialogService.startDialog(dialogs[index], positions);
+    this.dialogService.startDialog(dialogId, positions);
   }
 }
