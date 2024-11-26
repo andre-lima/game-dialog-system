@@ -30,6 +30,17 @@ export class DialogBoxComponent {
     return this.store.config.wideDialog.position;
   });
 
+  sentencePrompts = computed(() => {
+    const promptsList = this.store
+      .currentSentence()
+      ?.prompts?.filter(
+        (prompt) => !prompt.conditional || prompt?.conditional()
+      );
+    console.log(promptsList);
+
+    return promptsList;
+  });
+
   runSentenceAction(prompt: SentencePrompts) {
     prompt.action?.();
 

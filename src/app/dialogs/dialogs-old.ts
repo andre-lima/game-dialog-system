@@ -68,9 +68,9 @@ export const dialogs: Dialog[] = [
             },
           },
           {
-            label: '3rd option',
+            label: 'Conditional: 50% chance of showing',
             action: () => {
-              console.log('3333333');
+              console.log('i was lucky to show up');
             },
           },
         ],

@@ -16,6 +16,7 @@ export type Sentence = {
 
 export type SentencePrompts = {
   label: string;
+  conditional?: () => boolean;
   action?: () => void;
   nextIndex?: number;
   nextDialog?: string;

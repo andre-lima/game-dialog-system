@@ -12,7 +12,7 @@
 
     @if(!store.isPrinting()) {
     <ng-container>
-      @if(store.currentSentence()?.prompts; as prompts){
+      @if(sentencePrompts(); as prompts){
       <ng-container>
         @for (prompt of prompts; track prompt.label) {
         <span
